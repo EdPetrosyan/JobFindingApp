@@ -13,5 +13,7 @@ namespace JobFindingModels
         public string Location { get; set; }
         public virtual JobCategory Category { get; set; }
         public int? CategoryId { get; set; }
+        public virtual Company Company { get; set; }
+        public int? CompanyId { get; set; }
     }
 }

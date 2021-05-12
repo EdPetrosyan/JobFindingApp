@@ -12,5 +12,6 @@ namespace JobFindingModels
         [Required]
         [StringLength(JobFindingModelConstants.MAX_NAME_LENGTH)]
         public string Name { get; set; }
+        public virtual IList<Job> Jobs { get; set; }
     }
 }
