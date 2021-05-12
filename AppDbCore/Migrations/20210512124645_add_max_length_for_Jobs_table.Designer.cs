@@ -4,14 +4,16 @@ using AppDbCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AppDbCore.Migrations
 {
     [DbContext(typeof(JobFindingDbContext))]
-    partial class JobFindingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210512124645_add_max_length_for_Jobs_table")]
+    partial class add_max_length_for_Jobs_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,9 +79,6 @@ namespace AppDbCore.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("JobTypeId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
@@ -96,8 +95,6 @@ namespace AppDbCore.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("JobTypeId");
 
                     b.ToTable("Jobs");
                 });
@@ -130,21 +127,6 @@ namespace AppDbCore.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("JobFindingModels.JobType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("JobType");
-                });
-
             modelBuilder.Entity("JobFindingModels.Job", b =>
                 {
                     b.HasOne("JobFindingModels.JobCategory", "Category")
@@ -155,15 +137,9 @@ namespace AppDbCore.Migrations
                         .WithMany("Jobs")
                         .HasForeignKey("CompanyId");
 
-                    b.HasOne("JobFindingModels.JobType", "JobType")
-                        .WithMany("Jobs")
-                        .HasForeignKey("JobTypeId");
-
                     b.Navigation("Category");
 
                     b.Navigation("Company");
-
-                    b.Navigation("JobType");
                 });
 
             modelBuilder.Entity("JobFindingModels.Company", b =>
@@ -172,11 +148,6 @@ namespace AppDbCore.Migrations
                 });
 
             modelBuilder.Entity("JobFindingModels.JobCategory", b =>
-                {
-                    b.Navigation("Jobs");
-                });
-
-            modelBuilder.Entity("JobFindingModels.JobType", b =>
                 {
                     b.Navigation("Jobs");
                 });

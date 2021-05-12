@@ -13,6 +13,7 @@ namespace AppDbCore
         public DbSet<Job> Jobs { get; set; }
         public DbSet<JobCategory> Categories { get; set; }
         public DbSet<Company>  Companies { get; set; }
+        public DbSet<JobType> JobTypes { get; set; }
 
         public JobFindingDbContext():base()
         {
