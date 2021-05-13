@@ -14,6 +14,7 @@ namespace AppDbLayer
     public interface IJobFindingDatabaseRepoReadOnly
     {
         Task<List<GetJobsForListingDto>> GetJobsForListing();
+        Task<GetJobByIdDto> GetJobById(int id);
     }
     public interface IJobFindingDatabaseRepoWriteOnly
     {

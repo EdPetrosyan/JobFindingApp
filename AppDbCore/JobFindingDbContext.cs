@@ -18,6 +18,7 @@ namespace AppDbCore
         public DbSet<Company> Companies { get; set; }
         public DbSet<JobType> JobTypes { get; set; }
         public DbSet<GetJobsForListingDto> JobsForListingDtos {get;set;}
+        public DbSet<GetJobByIdDto> GetJobByIdDtos { get; set; }
 
         public JobFindingDbContext():base()
         {
@@ -44,6 +45,24 @@ namespace AppDbCore
        
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            OnBeforeSaving();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        public override int SaveChanges()
+        {
+            OnBeforeSaving();
+            return base.SaveChanges();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<GetJobsForListingDto>(x => x.ToView("GetJobsForListing"));
+            modelBuilder.Entity<GetJobByIdDto>(x => x.ToView("GetJobById"));
+        }
+
+        private void OnBeforeSaving()
+        {
             var tracker = ChangeTracker;
             foreach (var entry in tracker.Entries())
             {
@@ -64,12 +83,6 @@ namespace AppDbCore
                     }
                 }
             }
-            return base.SaveChangesAsync(cancellationToken);
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<GetJobsForListingDto>(x => x.ToView("GetJobsForListing"));
         }
     }
 }

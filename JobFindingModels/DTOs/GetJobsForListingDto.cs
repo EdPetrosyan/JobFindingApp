@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JobFindingModels.DTOs
 {
-    [Keyless]
     public class GetJobsForListingDto 
     {
+        public int Id { get; set; }
         public string Title { get; set; } = "";
         public string CompanyName { get; set; } = "";
         public string Location { get; set; } = "";

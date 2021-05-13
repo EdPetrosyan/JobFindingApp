@@ -25,5 +25,11 @@ namespace JobFindingApp.Controllers
             return View(result);
         }
 
+        public async Task<IActionResult> GetJob(int id)
+        {
+            var result = await _dbRepo.GetJobById(id);
+            return View(result);
+        }
+
     }
 }
