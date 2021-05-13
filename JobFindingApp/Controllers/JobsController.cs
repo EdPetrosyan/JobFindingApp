@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AppLayer;
+using JobFindingModels;
 
 namespace JobFindingApp.Controllers
 {
@@ -36,5 +37,21 @@ namespace JobFindingApp.Controllers
             var result = await _dbRepo.SearchJob(input);
             return View("Jobs", result);
         }
+
+        public async Task<IActionResult> GetFilters()
+        {
+            Filters filters = new Filters();
+            filters.Categories = await _dbRepo.GetJobCategories();
+            filters.JobTypes = await _dbRepo.GetJobTypes();
+            return View("Filters",filters);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetFilteredList(List<int> categories, List<int> types)
+        {
+            var result = await _dbRepo.GetFilteredList(categories,types);
+            return View("Jobs",result);
+        }
+
     }
 }

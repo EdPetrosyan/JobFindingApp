@@ -9,9 +9,16 @@
 <form asp-controller="Jobs" asp-action="SearchJob">
     <p>
         Search Job: <input type="text" name="input"/>
-        <input type="submit" value="input" />
+        <input type="submit" value="Search" />
     </p>
 </form>
+
+<form asp-controller="Jobs" asp-action="GetFilters">
+    <p>
+        <input type="submit" value="Filters" />
+    </p>
+</form>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>

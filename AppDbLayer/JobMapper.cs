@@ -25,6 +25,7 @@ namespace AppLayer
                 .ForMember(x => x.JobCategory, opt => opt.MapFrom(y => y.Category.Name))
                 .ForMember(x=> x.JobType, opt=>opt.MapFrom(y=>y.JobType.Type))
                 .ForMember(x => x.JobDescription, opt => opt.MapFrom(y => y.Description));
+            CreateMap<JobCategory, GetCategoriesDto>();
         }
     }
 }

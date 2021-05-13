@@ -1,0 +1,38 @@
+﻿@model JobFindingModels.Filters
+@{
+    ViewData["Title"] = "Filters";
+}
+
+<div class="container">
+
+    @using (Html.BeginForm("GetFilteredList", "Jobs", FormMethod.Post))
+    {
+        <h4>Jog Categories</h4>
+        @foreach (var item in Model.Categories)
+        {
+            <div class="checkbox">
+                <p>
+                    <input type="checkbox" name="categories" value="@item.Id" />
+                    <label>@Html.DisplayFor(modelItem => item.Name)</label>
+
+                </p>
+            </div>
+        }
+
+        <h4>Job Types</h4>
+        @foreach (var item in Model.JobTypes)
+        {
+            <div class="checkbox">
+                <p>
+                    <input type="checkbox" name="types" value="@item.Id" />
+                    <label>@Html.DisplayFor(modelItem => item.Type)</label>
+
+                </p>
+            </div>
+
+        }
+
+        <input type="submit" value="Submit" />
+    }
+
+</div>

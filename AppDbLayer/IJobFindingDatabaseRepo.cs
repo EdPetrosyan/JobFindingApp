@@ -16,6 +16,10 @@ namespace AppLayer
         Task<List<GetJobsForListingDto>> GetJobsForListing();
         Task<GetJobByIdDto> GetJobById(int id);
         Task<List<GetJobsForListingDto>> SearchJob(string input);
+        Task<List<GetCategoriesDto>> GetJobCategories();
+        Task<List<JobType>> GetJobTypes();
+        Task<List<GetJobsForListingDto>> GetFilteredList(IList<int> categories, IList<int> types);
+
     }
     public interface IJobFindingDatabaseRepoWriteOnly
     {
