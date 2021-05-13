@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using JobFindingModels;
+using JobFindingModels.DTOs;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace AppDbCore
 {
@@ -12,8 +15,9 @@ namespace AppDbCore
 
         public DbSet<Job> Jobs { get; set; }
         public DbSet<JobCategory> Categories { get; set; }
-        public DbSet<Company>  Companies { get; set; }
+        public DbSet<Company> Companies { get; set; }
         public DbSet<JobType> JobTypes { get; set; }
+        public DbSet<GetJobsForListingDto> JobsForListingDtos {get;set;}
 
         public JobFindingDbContext():base()
         {
@@ -37,12 +41,13 @@ namespace AppDbCore
             }
         }
 
-        public override int SaveChanges()
+       
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var tracker = ChangeTracker;
             foreach (var entry in tracker.Entries())
             {
-                if(entry.Entity is FullAuditModel)
+                if (entry.Entity is FullAuditModel)
                 {
                     var auditModel = entry.Entity as FullAuditModel;
                     switch (entry.State)
@@ -59,7 +64,12 @@ namespace AppDbCore
                     }
                 }
             }
-            return base.SaveChanges();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<GetJobsForListingDto>(x => x.ToView("GetJobsForListing"));
         }
     }
 }

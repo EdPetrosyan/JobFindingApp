@@ -4,14 +4,16 @@ using AppDbCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AppDbCore.Migrations
 {
     [DbContext(typeof(JobFindingDbContext))]
-    partial class JobFindingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210512144806_populate_db_Make_data_active")]
+    partial class populate_db_Make_data_active
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
