@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using JobFindingModels;
 using JobFindingModels.DTOs;
 
-namespace AppDbLayer
+namespace AppLayer
 {
     public interface IJobFindingDatabaseRepo : IJobFindingDatabaseRepoReadOnly, IJobFindingDatabaseRepoWriteOnly
     {
@@ -15,6 +15,7 @@ namespace AppDbLayer
     {
         Task<List<GetJobsForListingDto>> GetJobsForListing();
         Task<GetJobByIdDto> GetJobById(int id);
+        Task<List<GetJobsForListingDto>> SearchJob(string input);
     }
     public interface IJobFindingDatabaseRepoWriteOnly
     {

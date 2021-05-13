@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AppDbLayer;
+using AppLayer;
 
 namespace JobFindingApp.Controllers
 {
@@ -31,5 +31,10 @@ namespace JobFindingApp.Controllers
             return View(result);
         }
 
+        public async Task<IActionResult> SearchJob(string input)
+        {
+            var result = await _dbRepo.SearchJob(input);
+            return View("Jobs", result);
+        }
     }
 }

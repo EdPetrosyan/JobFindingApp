@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDbCore", "AppDbCore\AppD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobFindingModels", "JobFindingModels\JobFindingModels.csproj", "{9465A692-DE0D-4BB1-8692-AB215A6C7320}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDbLayer", "AppDbLayer\AppDbLayer.csproj", "{83EAC676-2137-4FA3-8BCF-F6B121E02260}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppLayer", "AppDbLayer\AppLayer.csproj", "{83EAC676-2137-4FA3-8BCF-F6B121E02260}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobFindingApp", "JobFindingApp\JobFindingApp.csproj", "{EFF9AAFC-1158-45F3-A475-9E0480F73B12}"
 EndProject

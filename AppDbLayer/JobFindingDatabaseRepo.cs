@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AppDbLayer
+namespace AppLayer
 {
     public class JobFindingDatabaseRepo : IJobFindingDatabaseRepo
     {
@@ -32,7 +32,7 @@ namespace AppDbLayer
 
         public async Task<GetJobByIdDto> GetJobById(int id)
         {
-            SqlParameter idParam = new SqlParameter("id", id);
+            //SqlParameter idParam = new("id", id);
             return await _context.Jobs
                 .Include(x => x.Company)
                 .Include(x => x.Category)
@@ -40,6 +40,16 @@ namespace AppDbLayer
                 .Where(x => x.Id == id)
                 .ProjectTo<GetJobByIdDto>(_mapper.ConfigurationProvider)
                 .FirstAsync();
+        }
+
+        public async Task<List<GetJobsForListingDto>> SearchJob(string input)
+        {
+            return await _context.Jobs
+                .Include(x => x.Company)
+                .Where(x => EF.Functions.Like(x.Title, $"%{input}%") 
+                            || EF.Functions.Like(x.Description, $"%{input}%"))
+                .ProjectTo<GetJobsForListingDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
     } 
 }
