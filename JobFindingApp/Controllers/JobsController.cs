@@ -53,5 +53,12 @@ namespace JobFindingApp.Controllers
             return View("Jobs",result);
         }
 
+        public async Task<IActionResult> MarkAsBookmarked(int id)
+        {
+            await _dbRepo.MarkAsBookmarked(id);
+            var result = await _dbRepo.GetJobsForListing();
+            return View("Jobs",result);
+        }
+
     }
 }

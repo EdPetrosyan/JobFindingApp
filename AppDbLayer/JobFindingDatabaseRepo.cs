@@ -85,5 +85,24 @@ namespace AppLayer
                 .ProjectTo<GetJobsForListingDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
+
+        public async Task MarkAsBookmarked(int id)
+        {
+            var entity = await GetJobForUpdate(id);
+            if(entity != default)
+            {
+                entity.IsBookmarked = !entity.IsBookmarked;
+                _context.Attach<Job>(entity);
+                _context.Entry(entity).Property(x => x.IsBookmarked).IsModified = true;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task<Job> GetJobForUpdate(int id)
+        {
+            return await _context.Jobs
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
+        }
     } 
 }

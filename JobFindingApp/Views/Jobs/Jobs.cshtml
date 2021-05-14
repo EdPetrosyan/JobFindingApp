@@ -8,7 +8,7 @@
 
 <form asp-controller="Jobs" asp-action="SearchJob">
     <p>
-        Search Job: <input type="text" name="input"/>
+        Search Job: <input type="text" name="input" />
         <input type="submit" value="Search" />
     </p>
 </form>
@@ -58,6 +58,8 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.IsBookmarked)
+                    <a asp-action="MarkAsBookmarked" asp-route-id="@item.Id">Book/Unbook</a>
+
                 </td>
 
                 <td>
@@ -65,7 +67,7 @@
                 </td>
 
                 <td>
-                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
+                   
                     <a asp-action="GetJob" asp-route-id="@item.Id">Details</a> |
                     @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
                 </td>
