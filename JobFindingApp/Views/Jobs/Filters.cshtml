@@ -32,6 +32,19 @@
 
         }
 
+        <h4>Locations</h4>
+        @foreach (var item in Model.Locations)
+        {
+            <div class="checkbox">
+                <p>
+                    <input type="checkbox" name="locations" value="@item" />
+                    <label>@Html.DisplayFor(modelItem => item)</label>
+
+                </p>
+            </div>
+
+        }
+
         <input type="submit" value="Submit" />
     }
 

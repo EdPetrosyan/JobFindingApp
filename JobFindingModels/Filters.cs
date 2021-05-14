@@ -11,5 +11,6 @@ namespace JobFindingModels
     {
         public IList<GetCategoriesDto> Categories { get; set; }
         public IList<JobType> JobTypes { get; set; }
+        public IList<string> Locations { get; set; }
     }
 }

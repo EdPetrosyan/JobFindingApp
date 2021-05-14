@@ -40,24 +40,27 @@ namespace JobFindingApp.Controllers
 
         public async Task<IActionResult> GetFilters()
         {
-            Filters filters = new Filters();
-            filters.Categories = await _dbRepo.GetJobCategories();
-            filters.JobTypes = await _dbRepo.GetJobTypes();
-            return View("Filters",filters);
+            Filters filters = new()
+            {
+                Categories = await _dbRepo.GetJobCategories(),
+                JobTypes = await _dbRepo.GetJobTypes(),
+                Locations = await _dbRepo.GetLocations()
+            };
+            return View("Filters", filters);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetFilteredList(List<int> categories, List<int> types)
+        public async Task<IActionResult> GetFilteredList(List<int> categories, List<int> types, List<string> locations)
         {
-            var result = await _dbRepo.GetFilteredList(categories,types);
-            return View("Jobs",result);
+            var result = await _dbRepo.GetFilteredList(categories, types, locations);
+            return View("Jobs", result);
         }
 
         public async Task<IActionResult> MarkAsBookmarked(int id)
         {
             await _dbRepo.MarkAsBookmarked(id);
             var result = await _dbRepo.GetJobsForListing();
-            return View("Jobs",result);
+            return View("Jobs", result);
         }
 
     }

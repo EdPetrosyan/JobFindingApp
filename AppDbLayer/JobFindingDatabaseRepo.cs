@@ -67,7 +67,15 @@ namespace AppLayer
 
         }
 
-        public async Task<List<GetJobsForListingDto>> GetFilteredList(IList<int> categories, IList<int> types)
+        public async Task<List<string>> GetLocations()
+        {
+            return await _context.Jobs
+                .GroupBy(x => x.Location)
+                .Select(x => x.Key)
+                .ToListAsync();
+        }
+
+        public async Task<List<GetJobsForListingDto>> GetFilteredList(IList<int> categories, IList<int> types, IList<string> locations)
         {
             var result =  _context.Jobs
                 .Include(x => x.Company)
@@ -80,6 +88,10 @@ namespace AppLayer
             if (types.Count > 0)
             {
                 result = result.Where(x => types.Contains(x.JobTypeId.Value));
+            }
+            if(locations.Count > 0)
+            {
+                result = result.Where(x => locations.Contains(x.Location));
             }
             return await result
                 .ProjectTo<GetJobsForListingDto>(_mapper.ConfigurationProvider)
