@@ -25,5 +25,6 @@ namespace AppLayer
     public interface IJobFindingDatabaseRepoWriteOnly
     {
         Task MarkAsBookmarked(int id);
+        Task AddJob(Job job);
     }
 }

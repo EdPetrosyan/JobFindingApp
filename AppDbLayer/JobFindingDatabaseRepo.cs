@@ -26,6 +26,7 @@ namespace AppLayer
         {
             return await _context.Jobs
                 .Include(x => x.Company)
+                .Where(x=>x.IsActive == true)
                 .ProjectTo<GetJobsForListingDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
@@ -46,8 +47,9 @@ namespace AppLayer
         {
             return await _context.Jobs
                 .Include(x => x.Company)
-                .Where(x => EF.Functions.Like(x.Title, $"%{input}%") 
-                            || EF.Functions.Like(x.Description, $"%{input}%"))
+                .Where(x => x.IsActive == true  && ( EF.Functions.Like(x.Title, $"%{input}%") 
+                            || EF.Functions.Like(x.Description, $"%{input}%")))
+                
                 .ProjectTo<GetJobsForListingDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
@@ -80,6 +82,7 @@ namespace AppLayer
             var result =  _context.Jobs
                 .Include(x => x.Company)
                 .Include(x=>x.JobType)
+                .Where(x => x.IsActive == true)
                 .AsQueryable();
             if(categories.Count > 0)
             {
@@ -112,9 +115,22 @@ namespace AppLayer
 
         private async Task<Job> GetJobForUpdate(int id)
         {
-            return await _context.Jobs
-                .Where(x => x.Id == id)
-                .FirstOrDefaultAsync();
+            return await _context.Jobs.FindAsync(id);
+        }
+
+        public async Task AddJob(Job job)
+        {
+            try
+            {
+                await _context.Jobs.AddAsync(job);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
     } 
 }

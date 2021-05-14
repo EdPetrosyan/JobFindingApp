@@ -77,6 +77,8 @@ namespace AppDbCore
                             break;
                         case EntityState.Added:
                             auditModel.CreatedDate = DateTime.Now;
+                            auditModel.IsActive = true;
+                            auditModel.IsDeleted = false;
                             break;
                         default:
                             break;

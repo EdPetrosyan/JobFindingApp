@@ -62,6 +62,16 @@ namespace JobFindingApp.Controllers
             var result = await _dbRepo.GetJobsForListing();
             return View("Jobs", result);
         }
+        public IActionResult CreateJob()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> AddJob([FromBody]Job job)
+        {
+            await _dbRepo.AddJob(job);
+            return Ok();
+        }
     }
 }
