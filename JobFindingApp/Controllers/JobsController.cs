@@ -15,11 +15,6 @@ namespace JobFindingApp.Controllers
         {
             _dbRepo = dbRepo;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public async Task<IActionResult> Jobs()
         {
             var result = await _dbRepo.GetJobsForListing();
@@ -68,6 +63,7 @@ namespace JobFindingApp.Controllers
         }
 
         [HttpPost]
+
         public async Task<IActionResult> AddJob([FromBody]Job job)
         {
             await _dbRepo.AddJob(job);

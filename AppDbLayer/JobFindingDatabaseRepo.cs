@@ -1,9 +1,10 @@
 ﻿using AppDbCore;
+using AppLayer.Exceptions;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using JobFindingModels;
 using JobFindingModels.DTOs;
-using Microsoft.Data.SqlClient;
+using System.Net;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,14 +28,13 @@ namespace AppLayer
             return await _context.Jobs
                 .AsNoTracking()
                 .Include(x => x.Company)
-                .Where(x=>x.IsActive == true)
+                .Where(x => x.IsActive == true)
                 .ProjectTo<GetJobsForListingDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
         public async Task<GetJobByIdDto> GetJobById(int id)
         {
-            //SqlParameter idParam = new("id", id);
             return await _context.Jobs
                 .AsNoTracking()
                 .Include(x => x.Company)
@@ -50,9 +50,9 @@ namespace AppLayer
             return await _context.Jobs
                 .AsNoTracking()
                 .Include(x => x.Company)
-                .Where(x => x.IsActive == true  && ( EF.Functions.Like(x.Title, $"%{input}%") 
+                .Where(x => x.IsActive == true && (EF.Functions.Like(x.Title, $"%{input}%")
                             || EF.Functions.Like(x.Description, $"%{input}%")))
-                
+
                 .ProjectTo<GetJobsForListingDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
@@ -85,21 +85,21 @@ namespace AppLayer
 
         public async Task<List<GetJobsForListingDto>> GetFilteredList(IList<int> categories, IList<int> types, IList<string> locations)
         {
-            var result =  _context.Jobs
+            var result = _context.Jobs
                 .AsNoTracking()
                 .Include(x => x.Company)
-                .Include(x=>x.JobType)
+                .Include(x => x.JobType)
                 .Where(x => x.IsActive == true)
                 .AsQueryable();
-            if(categories.Count > 0)
+            if (categories.Count > 0)
             {
-                result = result.Where(x=> categories.Contains(x.CategoryId.Value));
+                result = result.Where(x => categories.Contains(x.CategoryId.Value));
             }
             if (types.Count > 0)
             {
                 result = result.Where(x => types.Contains(x.JobTypeId.Value));
             }
-            if(locations.Count > 0)
+            if (locations.Count > 0)
             {
                 result = result.Where(x => locations.Contains(x.Location));
             }
@@ -111,13 +111,14 @@ namespace AppLayer
         public async Task MarkAsBookmarked(int id)
         {
             var entity = await GetJobForUpdate(id);
-            if(entity != default)
+            if (entity == null)
             {
-                entity.IsBookmarked = !entity.IsBookmarked;
-                _context.Attach<Job>(entity);
-                _context.Entry(entity).Property(x => x.IsBookmarked).IsModified = true;
-                await _context.SaveChangesAsync();
+                throw new AppException(HttpStatusCode.NotFound, "Job not Found");
             }
+            entity.IsBookmarked = !entity.IsBookmarked;
+            _context.Attach<Job>(entity);
+            _context.Entry(entity).Property(x => x.IsBookmarked).IsModified = true;
+            await _context.SaveChangesAsync();
         }
 
         private async Task<Job> GetJobForUpdate(int id)
@@ -127,17 +128,8 @@ namespace AppLayer
 
         public async Task AddJob(Job job)
         {
-            try
-            {
-                await _context.Jobs.AddAsync(job);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            
+            await _context.Jobs.AddAsync(job);
+            await _context.SaveChangesAsync();
         }
-    } 
+    }
 }
