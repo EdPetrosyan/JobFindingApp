@@ -16,13 +16,10 @@ namespace Tests
 {
     public class JobFindingDbContextTests : IDisposable
     {
-        private static IServiceProvider _serviceProvider;
         private DbContextOptions<JobFindingDbContext> _options;
         private static MapperConfiguration _mapperConfig;
         private static IMapper _mapper;
         private JobFindingDbContext _dbContext;
-        private const string sqlConnStr = "DataSource=:memory:";
-        private SqliteConnection _connection;
         private IJobFindingDatabaseRepo _dbRepo;
 
         private const string JOB1_TITLE = "job 1 title";
@@ -60,7 +57,6 @@ namespace Tests
 
             var services = new ServiceCollection();
             services.AddAutoMapper(typeof(JobMapper));
-            _serviceProvider = services.BuildServiceProvider();
 
             _mapperConfig = new MapperConfiguration(c => c.AddProfile<JobMapper>());
             _mapperConfig.AssertConfigurationIsValid();
@@ -70,12 +66,7 @@ namespace Tests
         }
         private void SetupSql()
         {
-            _connection = new SqliteConnection(sqlConnStr);
-            _connection.Open();
-            var options = new DbContextOptionsBuilder<JobFindingDbContext>()
-                 .UseSqlite(_connection)
-                 .Options;
-            _dbContext = new JobFindingDbContext(options);
+            _dbContext = new JobFindingDbContext(_options);
             _dbContext.Database.EnsureCreated();
         }
        

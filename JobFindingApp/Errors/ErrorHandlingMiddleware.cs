@@ -3,10 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace JobFindingApp.Errors
@@ -30,7 +27,7 @@ namespace JobFindingApp.Errors
             }
             catch (Exception error)
             {
-                
+
 
                 var response = context.Response;
 
@@ -41,7 +38,7 @@ namespace JobFindingApp.Errors
                         response.StatusCode = (int)appEx.Code;
                         break;
                     case Exception e:
-                        _logger.LogError(e,"Something went wrong");
+                        _logger.LogError(e, "Something went wrong");
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         break;
                 }
@@ -50,7 +47,7 @@ namespace JobFindingApp.Errors
 
                 response.ContentType = "application/json";
 
-               await response.WriteAsync(result);
+                await response.WriteAsync(result);
             }
         }
     }

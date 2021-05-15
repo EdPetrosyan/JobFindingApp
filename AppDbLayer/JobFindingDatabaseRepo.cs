@@ -4,11 +4,10 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using JobFindingModels;
 using JobFindingModels.DTOs;
-using System.Net;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace AppLayer
@@ -131,5 +130,27 @@ namespace AppLayer
             await _context.Jobs.AddAsync(job);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Company>> GetCompanies()
+        {
+            return await _context.Companies
+                .AsNoTracking().ToListAsync();
+        }
+
+        public async Task DeleteJob(int id)
+        {
+            var entity = await GetJobForUpdate(id);
+            if (entity == null)
+            {
+                throw new AppException(HttpStatusCode.NotFound, "Job not Found");
+            }
+            entity.IsActive = false;
+            entity.IsDeleted = true;
+            _context.Attach<Job>(entity);
+            _context.Entry(entity).Property(x => x.IsActive).IsModified = true;
+            _context.Entry(entity).Property(x => x.IsDeleted).IsModified = true;
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

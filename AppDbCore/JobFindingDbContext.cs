@@ -1,11 +1,11 @@
-﻿using System;
+﻿using JobFindingModels;
+using JobFindingModels.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
-using JobFindingModels;
-using JobFindingModels.DTOs;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace AppDbCore
 {
@@ -17,14 +17,14 @@ namespace AppDbCore
         public DbSet<JobCategory> Categories { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<JobType> JobTypes { get; set; }
-        public DbSet<GetJobsForListingDto> JobsForListingDtos {get;set;}
+        public DbSet<GetJobsForListingDto> JobsForListingDtos { get; set; }
         public DbSet<GetJobByIdDto> GetJobByIdDtos { get; set; }
 
-        public JobFindingDbContext():base()
+        public JobFindingDbContext() : base()
         {
 
         }
-        public JobFindingDbContext(DbContextOptions options):base(options)
+        public JobFindingDbContext(DbContextOptions options) : base(options)
         {
 
         }
@@ -42,7 +42,7 @@ namespace AppDbCore
             }
         }
 
-       
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             OnBeforeSaving();

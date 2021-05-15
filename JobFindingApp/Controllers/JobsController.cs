@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AppLayer;
+﻿using AppLayer;
 using JobFindingModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace JobFindingApp.Controllers
 {
@@ -57,17 +56,33 @@ namespace JobFindingApp.Controllers
             var result = await _dbRepo.GetJobsForListing();
             return View("Jobs", result);
         }
-        public IActionResult CreateJob()
+        public async Task<IActionResult> CreateJob()
         {
+            var categories = await _dbRepo.GetJobCategories();
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
+
+            var companies = await _dbRepo.GetCompanies();
+            ViewBag.Companies = new SelectList(companies, "Id", "Name");
+
+            var types = await _dbRepo.GetJobTypes();
+            ViewBag.JobTypes = new SelectList(types, "Id", "Type");
+
             return View();
         }
 
-        [HttpPost]
 
-        public async Task<IActionResult> AddJob([FromBody]Job job)
+        public async Task<IActionResult> AddJob(Job job)
         {
             await _dbRepo.AddJob(job);
-            return Ok();
+            var result = await _dbRepo.GetJobsForListing();
+            return View("Jobs", result);
+        }
+
+        public async Task<IActionResult> DeleteJob(int id)
+        {
+            await _dbRepo.DeleteJob(id);
+            var result = await _dbRepo.GetJobsForListing();
+            return View("Jobs", result);
         }
     }
 }

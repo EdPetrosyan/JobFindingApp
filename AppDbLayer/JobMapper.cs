@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using JobFindingModels;
 using JobFindingModels.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AppLayer
 {
@@ -23,7 +18,7 @@ namespace AppLayer
             CreateMap<Job, GetJobByIdDto>()
                 .ForMember(x => x.CompanyName, opt => opt.MapFrom(y => y.Company.Name))
                 .ForMember(x => x.JobCategory, opt => opt.MapFrom(y => y.Category.Name))
-                .ForMember(x=> x.JobType, opt=>opt.MapFrom(y=>y.JobType.Type))
+                .ForMember(x => x.JobType, opt => opt.MapFrom(y => y.JobType.Type))
                 .ForMember(x => x.JobDescription, opt => opt.MapFrom(y => y.Description));
             CreateMap<JobCategory, GetCategoriesDto>();
         }

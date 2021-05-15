@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JobFindingModels;
+﻿using JobFindingModels;
 using JobFindingModels.DTOs;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AppLayer
 {
@@ -20,11 +17,13 @@ namespace AppLayer
         Task<List<JobType>> GetJobTypes();
         Task<List<GetJobsForListingDto>> GetFilteredList(IList<int> categories, IList<int> types, IList<string> locations);
         Task<List<string>> GetLocations();
+        Task<List<Company>> GetCompanies();
 
     }
     public interface IJobFindingDatabaseRepoWriteOnly
     {
         Task MarkAsBookmarked(int id);
         Task AddJob(Job job);
+        Task DeleteJob(int id);
     }
 }
