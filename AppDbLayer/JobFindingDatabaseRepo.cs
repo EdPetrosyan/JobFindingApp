@@ -25,6 +25,7 @@ namespace AppLayer
         public async Task<List<GetJobsForListingDto>> GetJobsForListing()
         {
             return await _context.Jobs
+                .AsNoTracking()
                 .Include(x => x.Company)
                 .Where(x=>x.IsActive == true)
                 .ProjectTo<GetJobsForListingDto>(_mapper.ConfigurationProvider)
@@ -35,6 +36,7 @@ namespace AppLayer
         {
             //SqlParameter idParam = new("id", id);
             return await _context.Jobs
+                .AsNoTracking()
                 .Include(x => x.Company)
                 .Include(x => x.Category)
                 .Include(x => x.JobType)
@@ -46,6 +48,7 @@ namespace AppLayer
         public async Task<List<GetJobsForListingDto>> SearchJob(string input)
         {
             return await _context.Jobs
+                .AsNoTracking()
                 .Include(x => x.Company)
                 .Where(x => x.IsActive == true  && ( EF.Functions.Like(x.Title, $"%{input}%") 
                             || EF.Functions.Like(x.Description, $"%{input}%")))
@@ -58,6 +61,7 @@ namespace AppLayer
         {
 
             return await _context.Categories
+                .AsNoTracking()
                 .ProjectTo<GetCategoriesDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
@@ -65,6 +69,7 @@ namespace AppLayer
         public async Task<List<JobType>> GetJobTypes()
         {
             return await _context.JobTypes
+                .AsNoTracking()
                 .ToListAsync();
 
         }
@@ -72,6 +77,7 @@ namespace AppLayer
         public async Task<List<string>> GetLocations()
         {
             return await _context.Jobs
+                .AsNoTracking()
                 .GroupBy(x => x.Location)
                 .Select(x => x.Key)
                 .ToListAsync();
@@ -80,6 +86,7 @@ namespace AppLayer
         public async Task<List<GetJobsForListingDto>> GetFilteredList(IList<int> categories, IList<int> types, IList<string> locations)
         {
             var result =  _context.Jobs
+                .AsNoTracking()
                 .Include(x => x.Company)
                 .Include(x=>x.JobType)
                 .Where(x => x.IsActive == true)
