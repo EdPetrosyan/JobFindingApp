@@ -43,7 +43,6 @@ namespace JobFindingApp.Controllers
             return View("Filters", filters);
         }
 
-        [HttpPost]
         public async Task<IActionResult> GetFilteredList(List<int> categories, List<int> types, List<string> locations)
         {
             var result = await _dbRepo.GetFilteredList(categories, types, locations);
