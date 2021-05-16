@@ -1,7 +1,9 @@
 ﻿using AppLayer;
+using AppLayer.Cache;
 using JobFindingModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,9 +12,11 @@ namespace JobFindingApp.Controllers
     public class JobsController : Controller
     {
         private readonly IJobFindingDatabaseRepo _dbRepo;
-        public JobsController(IJobFindingDatabaseRepo dbRepo)
+        private readonly ICacheManager _cache;
+        public JobsController(IJobFindingDatabaseRepo dbRepo, ICacheManager cache)
         {
             _dbRepo = dbRepo;
+            _cache = cache;
         }
         public async Task<IActionResult> Jobs()
         {
@@ -36,8 +40,8 @@ namespace JobFindingApp.Controllers
         {
             Filters filters = new()
             {
-                Categories = await _dbRepo.GetJobCategories(),
-                JobTypes = await _dbRepo.GetJobTypes(),
+                Categories = _cache.GetOrAdd("_categories", await _dbRepo.GetJobCategories()),
+                JobTypes = _cache.GetOrAdd("_types", await _dbRepo.GetJobTypes()),
                 Locations = await _dbRepo.GetLocations()
             };
             return View("Filters", filters);
@@ -57,13 +61,13 @@ namespace JobFindingApp.Controllers
         }
         public async Task<IActionResult> CreateJob()
         {
-            var categories = await _dbRepo.GetJobCategories();
+            var categories = _cache.GetOrAdd("_categories", await _dbRepo.GetJobCategories());
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
 
-            var companies = await _dbRepo.GetCompanies();
+            var companies = _cache.GetOrAdd("_companies", await _dbRepo.GetCompanies());
             ViewBag.Companies = new SelectList(companies, "Id", "Name");
 
-            var types = await _dbRepo.GetJobTypes();
+            var types = _cache.GetOrAdd("_types", await _dbRepo.GetJobTypes());
             ViewBag.JobTypes = new SelectList(types, "Id", "Type");
 
             return View();

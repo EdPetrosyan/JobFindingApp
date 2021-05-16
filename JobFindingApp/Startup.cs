@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AppLayer;
 using JobFindingApp.Errors;
+using AppLayer.Cache;
 
 namespace JobFindingApp
 {
@@ -23,7 +24,10 @@ namespace JobFindingApp
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
 
+            services.AddMemoryCache();
+
             services.AddRepo(Configuration);
+            services.AddSingleton<ICacheManager, CacheManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
