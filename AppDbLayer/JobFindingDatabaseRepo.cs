@@ -5,6 +5,7 @@ using AutoMapper.QueryableExtensions;
 using JobFindingModels;
 using JobFindingModels.DTOs;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -19,8 +20,8 @@ namespace AppLayer
 
         public JobFindingDatabaseRepo(JobFindingDbContext context, IMapper mapper)
         {
-            _context = context;
-            _mapper = mapper;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         public async Task<List<GetJobsForListingDto>> GetJobsForListing()
         {
@@ -112,7 +113,7 @@ namespace AppLayer
             var entity = await GetJobForUpdate(id);
             if (entity == null)
             {
-                throw new AppException(HttpStatusCode.NotFound, "Job not Found");
+                throw new AppException(HttpStatusCode.NotFound, "Entity could not be loaded.");
             }
             entity.IsBookmarked = !entity.IsBookmarked;
             _context.Attach<Job>(entity);
@@ -142,7 +143,7 @@ namespace AppLayer
             var entity = await GetJobForUpdate(id);
             if (entity == null)
             {
-                throw new AppException(HttpStatusCode.NotFound, "Job not Found");
+                throw new AppException(HttpStatusCode.NotFound, "Entity could not be loaded.");
             }
             entity.IsActive = false;
             entity.IsDeleted = true;
